@@ -7,7 +7,11 @@ body {
     width: 100vw;
 }
 
-.container {
+.hidden {
+    display: none;
+}
+
+/* .container {
     display: flex;
     height: 100%;
 }
@@ -22,4 +26,4 @@ body {
     background-color: aquamarine;
     height: 100%;
     width: 85%;
-}
+} */

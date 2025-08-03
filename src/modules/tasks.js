@@ -41,7 +41,20 @@ export class Project {
     }
 }
 
-// 3. Project UI
+// 3. Project Manager
+export class ProjectManager {
+    constructor() {
+        this.projects = [];
+    }
+
+    addProject(project) {
+        this.projects.push(project);
+    }
+
+    removeProject(id) {
+        this.projects = this.projects.filter((project) => project.id !== id)
+    }
+}
 
 
 
