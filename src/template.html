@@ -6,6 +6,29 @@
     <title>To Do List</title>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="sidebar"></div>
+            <!-- Add Projects and Logic here -->
+            <button class="AddTask">Add Task</button>
+            <button class="AddProject">Add Project</button>
+                <!-- Project dialog -->
+                 <dialog id="projectDialog">
+                    <form method="dialog" id="projectForm">
+                        <label for="projectName">Project Name:</label>
+                        <input type="text" name="projectName" required>
+                        <menu>
+                            <button type="submit">Add</button>
+                            <button type="button" class="cancel">Cancel</button>
+                        </menu>
+                    </form>
+                 </dialog>
+
+            <h1>My projects</h1>
+            <div class="ProjectList"></div>
+        <div class="main">
+            <!-- Add Tasks here -->
+             <div class="TaskList"></div>
+        </div>
+    </div>
 </body>
 </html>
