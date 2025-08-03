@@ -62,6 +62,8 @@ function renderProjects() {
             // Add delete button
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
+            deleteBtn.classList.add("projectDelete")
+
             deleteBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 project.tasks = []
@@ -87,14 +89,14 @@ function renderTasks(project) {
             taskItem.classList.add("task");
 
             const summary = document.createElement("span");
-            summary.textContent = `${task.title} - Due: ${task.dueDate} - Priority: ${task.priority}`
+            summary.textContent = `${task.title} / Due: ${task.dueDate} / Priority: ${task.priority}`
             taskItem.appendChild(summary);
 
             // Description (hidden initially)
             const description = document.createElement("div");
             description.textContent = task.description;
             description.classList.add("task-description", "hidden");
-            taskItem.appendChild(description);
+            
 
             taskItem.addEventListener("click", () => {
                 description.classList.toggle("hidden");
@@ -103,7 +105,7 @@ function renderTasks(project) {
             // Delete button
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
-            deleteBtn.classList.add("deleteBtn");
+            deleteBtn.classList.add("taskDelete");
 
             deleteBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
@@ -111,6 +113,7 @@ function renderTasks(project) {
                 renderTasks(currentProject);
             })
             taskItem.appendChild(deleteBtn);
+            taskItem.appendChild(description);
 
             TaskList.appendChild(taskItem);
         })

@@ -17,22 +17,38 @@ body {
 }
 
 .sidebar {
-    background-color: rgb(74, 74, 255);
+    background-color: rgb(128, 128, 255);
     height: 100%;
     width: 15%;
     padding: 16px;
     box-sizing: border-box;
+    border: 2px solid black;
 }
 
 .main {
-    background-color: aquamarine;
+    background-color: rgb(161, 255, 224);
     height: 100%;
     width: 85%;
     padding: 16px;
     box-sizing: border-box;
     font-size: 24px;;
+    border: 2px solid black;
 }
 
 .ProjectList {
     font-size: 24px;
+}
+
+.AddTask, .AddProject {
+    font-size: 16px;
+    padding: 10px;
+    border: 2px solid black;
+    background-color: rgb(255, 218, 170);
+    margin: 10px;
+}
+
+.projectDelete, .taskDelete {
+    background-color: rgb(255, 175, 175);
+    margin: 10px;
+    border: 2px solid black;
 }
