@@ -49,10 +49,30 @@ export class ProjectManager {
 
     addProject(project) {
         this.projects.push(project);
+        this.saveToLocalStorage();
     }
 
     removeProject(id) {
         this.projects = this.projects.filter((project) => project.id !== id)
+        this.saveToLocalStorage();
+    }
+
+    saveToLocalStorage() {
+        const serialized = JSON.stringify(this.projects);
+        localStorage.setItem("projects", serialized);
+    }
+
+    loadFromLocalStorage() {
+        const data = localStorage.getItem("projects");
+        if (data) {
+            const parsed = JSON.parse(data);
+            this.projects = parsed.map(proj => {
+                const project = new Project(proj.name);
+                project.id = proj.id;
+                project.tasks = proj.tasks.map(t => new Task(t.title, t.description, t.dueDate, t.priority));
+                return project;
+            })
+        }
     }
 }
 

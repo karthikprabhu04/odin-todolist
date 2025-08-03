@@ -4,11 +4,19 @@ const ProjectList = document.querySelector(".ProjectList");
 const TaskList = document.querySelector(".TaskList");
 
 const projectManager = new ProjectManager();
-const project1 = new Project("Welcome!");
-projectManager.addProject(project1)
 
-let currentProject = project1;
-window.currentProject = currentProject;
+projectManager.loadFromLocalStorage();
+
+let currentProject;
+
+if (projectManager.projects.length > 0) {
+    currentProject = projectManager.projects[0];
+} else {
+    const defaultProject = new Project("Welcome!");
+    projectManager.addProject(defaultProject);
+    currentProject = defaultProject;
+}
+
 renderTasks(currentProject);
 
 export function AddProject() {
@@ -50,12 +58,16 @@ function renderProjects() {
         projectManager.projects.forEach((project) => {
             const item = document.createElement("div");
             item.textContent = project.name;
+            if (project === currentProject) {
+                item.classList.add("activeProject");
+            }
             ProjectList.appendChild(item);
         
             // Add interaction with projects so each displays tasks
             item.addEventListener("click", () => {
                 currentProject = project;
                 renderTasks(currentProject);
+                renderProjects();
                 console.log("Changed projects");
             })
 
@@ -128,7 +140,7 @@ export function AddTask() {
     const form = dialog.querySelector("#taskForm");
     
     AddTaskBtn.addEventListener("click", () => {
-        if (projectManager.projects.length === 0) {
+        if (projectManager.projects.length === 0 || !projectManager.projects.includes(currentProject)) {
             alert("Must choose a project folder for tasks")
             return;
         }
@@ -146,6 +158,7 @@ export function AddTask() {
         // Add task to current project list
         currentProject.addTask(newTask);
         renderTasks(currentProject);
+        projectManager.saveToLocalStorage();
 
         form.reset();
         dialog.close();
