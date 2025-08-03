@@ -1,4 +1,5 @@
 import {Task, Project, ProjectManager} from "./tasks.js";
+import { parseISO, format } from 'date-fns';
 
 const ProjectList = document.querySelector(".ProjectList");
 const TaskList = document.querySelector(".TaskList");
@@ -101,7 +102,7 @@ function renderTasks(project) {
             taskItem.classList.add("task");
 
             const summary = document.createElement("span");
-            summary.textContent = `${task.title} / Due: ${task.dueDate} / Priority: ${task.priority}`
+            summary.textContent = `${task.title} __ Due: ${task.dueDate} __ Priority: ${task.priority}`
             taskItem.appendChild(summary);
 
             // Description (hidden initially)
@@ -153,7 +154,7 @@ export function AddTask() {
     dialog.addEventListener("submit", () => {
         // Get form data and create task
         const formdata = new FormData(form);
-        const newTask = new Task(formdata.get("title"), formdata.get("description"), formdata.get("dueDate"), formdata.get("priority"));
+        const newTask = new Task(formdata.get("title"), formdata.get("description"), formatDate(formdata.get("dueDate")), formdata.get("priority"));
 
         // Add task to current project list
         currentProject.addTask(newTask);
@@ -163,4 +164,10 @@ export function AddTask() {
         form.reset();
         dialog.close();
     })
+}
+
+function formatDate(dueDate) {
+    const dateObj = parseISO(dueDate);
+    const formattedDate = format(dateObj, "dd/MM/yyyy");
+    return formattedDate;
 }
