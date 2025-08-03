@@ -11,7 +11,7 @@ body {
     display: none;
 }
 
-/* .container {
+.container {
     display: flex;
     height: 100%;
 }
@@ -20,10 +20,19 @@ body {
     background-color: rgb(74, 74, 255);
     height: 100%;
     width: 15%;
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 .main {
     background-color: aquamarine;
     height: 100%;
     width: 85%;
-} */
+    padding: 16px;
+    box-sizing: border-box;
+    font-size: 24px;;
+}
+
+.ProjectList {
+    font-size: 24px;
+}

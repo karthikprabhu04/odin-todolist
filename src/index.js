@@ -9,10 +9,4 @@ window.ProjectManager = ProjectManager;
 AddProject();
 AddTask();
 
-const task1 = new Task("Hello", "testing description", "15", "high");
-const task2 = new Task("Hi", "testing description", "30", "low");
 
-const project1 = new Project();
-project1.addTask(task1);
-project1.addTask(task2);
-console.log(project1.tasks)

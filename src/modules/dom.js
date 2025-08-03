@@ -4,8 +4,12 @@ const ProjectList = document.querySelector(".ProjectList");
 const TaskList = document.querySelector(".TaskList");
 
 const projectManager = new ProjectManager();
+const project1 = new Project("Welcome!");
+projectManager.addProject(project1)
 
-let currentProject = null;
+let currentProject = project1;
+window.currentProject = currentProject;
+renderTasks(currentProject);
 
 export function AddProject() {
     const AddProjectBtn = document.querySelector(".AddProject");
@@ -17,6 +21,8 @@ export function AddProject() {
 
     cancel.addEventListener("click", () => dialog.close());
 
+    renderProjects();
+
     dialog.addEventListener("submit", (e) => {
         e.preventDefault();
         // Get form data and create project
@@ -27,30 +33,56 @@ export function AddProject() {
         projectManager.addProject(newProject);
 
         // Display project
-        const item = document.createElement("div");
-        item.textContent = newProject.name;
-        ProjectList.appendChild(item);
-
-        // Add interaction with projects so each displays tasks
-        item.addEventListener("click", () => {
-            currentProject = newProject;
-            renderTasks(newProject);
-        })
-        currentProject = newProject
+        currentProject = newProject;
+        console.log("Added project", currentProject.name);
+        renderProjects();
 
         form.reset();
         dialog.close();
     })
 }
 
-// Render the tasks within each project
+function renderProjects() {
+    ProjectList.innerHTML = "";
+    if (projectManager.projects.length === 0)  {
+        ProjectList.textContent = "No projects";
+    } else {
+        projectManager.projects.forEach((project) => {
+            const item = document.createElement("div");
+            item.textContent = project.name;
+            ProjectList.appendChild(item);
+        
+            // Add interaction with projects so each displays tasks
+            item.addEventListener("click", () => {
+                currentProject = project;
+                renderTasks(currentProject);
+                console.log("Changed projects");
+            })
+
+            // Add delete button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                project.tasks = []
+                renderTasks(currentProject);
+                projectManager.removeProject(project.id);
+                renderProjects();
+                console.log("Deleted");
+            })
+            item.appendChild(deleteBtn);
+        })
+    }
+}
+
+// Render the tasks within a project
 function renderTasks(project) {
     TaskList.innerHTML = "";
 
     if (project.tasks.length === 0) {
         TaskList.textContent = "No tasks in this project";
     } else {
-        project.tasks.forEach(task => {
+        project.tasks.forEach((task, index) => {
             const taskItem = document.createElement("div");
             taskItem.classList.add("task");
 
@@ -58,6 +90,7 @@ function renderTasks(project) {
             summary.textContent = `${task.title} - Due: ${task.dueDate} - Priority: ${task.priority}`
             taskItem.appendChild(summary);
 
+            // Description (hidden initially)
             const description = document.createElement("div");
             description.textContent = task.description;
             description.classList.add("task-description", "hidden");
@@ -67,12 +100,24 @@ function renderTasks(project) {
                 description.classList.toggle("hidden");
             })
 
+            // Delete button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.classList.add("deleteBtn");
+
+            deleteBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                project.tasks.splice(index, 1);
+                renderTasks(currentProject);
+            })
+            taskItem.appendChild(deleteBtn);
+
             TaskList.appendChild(taskItem);
         })
     }
 }
 
-// Add Task
+// Create Task
 export function AddTask() {
     const AddTaskBtn = document.querySelector(".AddTask");
     const dialog = document.querySelector("#taskDialog");
@@ -80,7 +125,7 @@ export function AddTask() {
     const form = dialog.querySelector("#taskForm");
     
     AddTaskBtn.addEventListener("click", () => {
-        if (currentProject === null) {
+        if (projectManager.projects.length === 0) {
             alert("Must choose a project folder for tasks")
             return;
         }
